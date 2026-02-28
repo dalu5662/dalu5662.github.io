@@ -441,7 +441,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v10.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v11.0</span>
   </div>
 </div>
 
@@ -469,7 +469,7 @@
     });
   }
 
-  // ========== 基础题库模板（11类） ==========
+  // ========== 基础题库模板（修复版） ==========
   const BASE_TEMPLATES = [
     {
       type: "归一",
@@ -518,14 +518,14 @@
     {
       type: "和倍",
       generate: () => {
-        const sum = Math.floor(Math.random() * 150) + 50;
-        const multiple = Math.floor(Math.random() * 4) + 2;
-        const small = sum / (multiple + 1);
+        const multiple = Math.floor(Math.random() * 4) + 2; // 2-5倍
+        const small = Math.floor(Math.random() * 30) + 10; // 10-39本，保证是整数
+        const sum = small * (multiple + 1); // 总数一定是整数
         return {
           text: `🦁 故事书+科技书=${sum}本，故事书是科技书${multiple}倍，科技书几本？`,
           ans: small,
-          childHint: `🤔 科技书是1份，故事书是几份？总共几份？`,
-          parentHint: `科技书1份，故事书${multiple}份，共${multiple+1}份=${sum}，1份=${small}`
+          childHint: `🤔 科技书是1份，故事书是${multiple}份，总共${multiple+1}份，每份是多少？`,
+          parentHint: `总数${sum} ÷ ${multiple+1} = ${small}本`
         };
       }
     },
@@ -624,20 +624,25 @@
     {
       type: "分数",
       generate: () => {
-        const total = Math.floor(Math.random() * 100) + 50;
-        const numerator = Math.floor(Math.random() * 3) + 1;
-        const denominator = Math.floor(Math.random() * 3) + 4;
+        const total = Math.floor(Math.random() * 100) + 50; // 50-149
+        const numerator = Math.floor(Math.random() * 3) + 1; // 1-3
+        const denominator = Math.floor(Math.random() * 3) + 4; // 4-6
+        
+        // 计算结果并四舍五入到两位小数
+        const rawResult = total * numerator / denominator;
+        const roundedResult = Math.round(rawResult * 100) / 100;
+        
         return {
           text: `🐞 路全长${total}米，修了${numerator}/${denominator}，修了多少米？`,
-          ans: total * numerator / denominator,
-          childHint: `🤔 求一个数的几分之几是多少，用什么方法？`,
-          parentHint: `${total} × ${numerator}/${denominator} = ${total * numerator / denominator}`
+          ans: roundedResult,
+          childHint: `🤔 求一个数的几分之几是多少，用乘法。结果保留两位小数。`,
+          parentHint: `${total} × ${numerator}/${denominator} = ${rawResult.toFixed(3)} ≈ ${roundedResult}米`
         };
       }
     }
   ];
 
-  // ========== 奥数题库模板（8类） ==========
+  // ========== 奥数题库模板 ==========
   const OLYMPIC_TEMPLATES = [
     {
       type: "周期问题",
