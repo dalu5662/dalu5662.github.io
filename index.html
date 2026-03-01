@@ -21,6 +21,7 @@
   <meta name="theme-color" content="#ff6b6b">
   
   <style>
+    /* 样式保持不变，与之前相同 */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -441,7 +442,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v12.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v13.0</span>
   </div>
 </div>
 
@@ -504,20 +505,18 @@
     {
       type: "和差",
       generate: () => {
-        // 确保和与差同奇偶，保证结果是整数
-        let sum, diff;
-        do {
-          sum = Math.floor(Math.random() * 30) + 15; // 15-44
-          diff = Math.floor(Math.random() * 8) + 2;  // 2-9
-        } while ((sum - diff) % 2 !== 0);
-        
-        const small = (sum - diff) / 2;
+        // 先生成小明（小数），保证整数
+        const small = Math.floor(Math.random() * 15) + 5; // 5-19颗
+        // 再生成差
+        const diff = Math.floor(Math.random() * 8) + 2; // 2-9
+        // 计算和，一定是整数
+        const sum = small * 2 + diff;
         
         return {
           text: `🐼 小红和小明共${sum}颗糖，小红比小明多${diff}颗，小明有几颗？`,
           ans: small,
           childHint: `🤔 如果两人一样多，总数会是多少？多的那部分怎么处理？`,
-          parentHint: `小数=(和-差)÷2 = (${sum}-${diff})÷2=${small}`
+          parentHint: `小数 = (和 - 差) ÷ 2 = (${sum} - ${diff}) ÷ 2 = ${small}`
         };
       }
     },
@@ -525,8 +524,10 @@
       type: "和倍",
       generate: () => {
         const multiple = Math.floor(Math.random() * 4) + 2; // 2-5倍
-        const small = Math.floor(Math.random() * 20) + 5; // 5-24本，保证整数
-        const sum = small * (multiple + 1); // 总数一定是整数
+        // 先生成科技书（小数部分），保证整数
+        const small = Math.floor(Math.random() * 20) + 5; // 5-24本
+        // 计算总数，一定是整数
+        const sum = small * (multiple + 1);
         
         return {
           text: `🦁 故事书+科技书=${sum}本，故事书是科技书${multiple}倍，科技书几本？`,
