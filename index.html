@@ -442,7 +442,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v14.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v15.0</span>
   </div>
 </div>
 
@@ -524,8 +524,8 @@
       type: "和倍",
       generate: () => {
         const multiple = Math.floor(Math.random() * 4) + 2; // 2-5倍
-        // 先生成科技书（小数部分），保证整数
-        const small = Math.floor(Math.random() * 20) + 5; // 5-24本
+        // 扩大科技书范围到 5-40 本，保证数字多样性和整数性
+        const small = Math.floor(Math.random() * 36) + 5; // 5-40本
         // 计算总数，一定是整数
         const sum = small * (multiple + 1);
         
