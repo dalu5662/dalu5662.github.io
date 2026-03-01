@@ -441,7 +441,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v11.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v12.0</span>
   </div>
 </div>
 
@@ -469,7 +469,7 @@
     });
   }
 
-  // ========== 基础题库模板（修复版） ==========
+  // ========== 基础题库模板（最终修复版） ==========
   const BASE_TEMPLATES = [
     {
       type: "归一",
@@ -504,9 +504,15 @@
     {
       type: "和差",
       generate: () => {
-        const sum = Math.floor(Math.random() * 30) + 15;
-        const diff = Math.floor(Math.random() * 8) + 2;
+        // 确保和与差同奇偶，保证结果是整数
+        let sum, diff;
+        do {
+          sum = Math.floor(Math.random() * 30) + 15; // 15-44
+          diff = Math.floor(Math.random() * 8) + 2;  // 2-9
+        } while ((sum - diff) % 2 !== 0);
+        
         const small = (sum - diff) / 2;
+        
         return {
           text: `🐼 小红和小明共${sum}颗糖，小红比小明多${diff}颗，小明有几颗？`,
           ans: small,
@@ -519,8 +525,9 @@
       type: "和倍",
       generate: () => {
         const multiple = Math.floor(Math.random() * 4) + 2; // 2-5倍
-        const small = Math.floor(Math.random() * 30) + 10; // 10-39本，保证是整数
+        const small = Math.floor(Math.random() * 20) + 5; // 5-24本，保证整数
         const sum = small * (multiple + 1); // 总数一定是整数
+        
         return {
           text: `🦁 故事书+科技书=${sum}本，故事书是科技书${multiple}倍，科技书几本？`,
           ans: small,
