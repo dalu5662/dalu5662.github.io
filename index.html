@@ -442,7 +442,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v13.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v14.0</span>
   </div>
 </div>
 
@@ -540,14 +540,17 @@
     {
       type: "差倍",
       generate: () => {
-        const diff = Math.floor(Math.random() * 20) + 20;
-        const multiple = Math.floor(Math.random() * 3) + 2;
-        const small = diff / (multiple - 1);
+        const multiple = Math.floor(Math.random() * 3) + 2; // 2-4倍
+        // 先生成小红年龄，保证整数
+        const small = Math.floor(Math.random() * 10) + 5; // 5-14岁
+        // 计算年龄差，保证是 (multiple-1) 的倍数
+        const diff = small * (multiple - 1);
+        
         return {
           text: `🐨 妈妈年龄是小红的${multiple}倍，比小红大${diff}岁，小红几岁？`,
           ans: small,
-          childHint: `🤔 妈妈比小红大的部分，相当于小红的几倍？`,
-          parentHint: `差倍: ${diff}÷(${multiple}-1)=${small}`
+          childHint: `🤔 妈妈比小红大的部分，相当于小红的${multiple-1}倍`,
+          parentHint: `小红年龄 = 年龄差 ÷ (倍数-1) = ${diff} ÷ ${multiple-1} = ${small}岁`
         };
       }
     },
