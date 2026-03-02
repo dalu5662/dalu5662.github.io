@@ -21,7 +21,6 @@
   <meta name="theme-color" content="#ff6b6b">
   
   <style>
-    /* 样式保持不变，与之前相同 */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -442,7 +441,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v15.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v16.0</span>
   </div>
 </div>
 
@@ -507,7 +506,7 @@
       generate: () => {
         // 先生成小明（小数），保证整数
         const small = Math.floor(Math.random() * 15) + 5; // 5-19颗
-        // 再生成差
+        // 生成差
         const diff = Math.floor(Math.random() * 8) + 2; // 2-9
         // 计算和，一定是整数
         const sum = small * 2 + diff;
@@ -515,8 +514,8 @@
         return {
           text: `🐼 小红和小明共${sum}颗糖，小红比小明多${diff}颗，小明有几颗？`,
           ans: small,
-          childHint: `🤔 如果两人一样多，总数会是多少？多的那部分怎么处理？`,
-          parentHint: `小数 = (和 - 差) ÷ 2 = (${sum} - ${diff}) ÷ 2 = ${small}`
+          childHint: `🤔 如果两人一样多，总数会是${small*2}颗，多出的${diff}颗加给小红`,
+          parentHint: `小明 = (和 - 差) ÷ 2 = (${sum} - ${diff}) ÷ 2 = ${small}`
         };
       }
     },
@@ -524,16 +523,16 @@
       type: "和倍",
       generate: () => {
         const multiple = Math.floor(Math.random() * 4) + 2; // 2-5倍
-        // 扩大科技书范围到 5-40 本，保证数字多样性和整数性
-        const small = Math.floor(Math.random() * 36) + 5; // 5-40本
-        // 计算总数，一定是整数
+        // 先生成科技书，保证整数
+        const small = Math.floor(Math.random() * 30) + 5; // 5-34本
+        // 计算总数，一定是 (multiple+1) 的倍数
         const sum = small * (multiple + 1);
         
         return {
           text: `🦁 故事书+科技书=${sum}本，故事书是科技书${multiple}倍，科技书几本？`,
           ans: small,
-          childHint: `🤔 科技书是1份，故事书是${multiple}份，总共${multiple+1}份，每份是多少？`,
-          parentHint: `总数${sum} ÷ ${multiple+1} = ${small}本`
+          childHint: `🤔 科技书是1份，故事书是${multiple}份，总共${multiple+1}份`,
+          parentHint: `科技书 = 总数 ÷ (倍数+1) = ${sum} ÷ ${multiple+1} = ${small}本`
         };
       }
     },
