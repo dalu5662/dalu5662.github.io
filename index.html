@@ -441,7 +441,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v18.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v19.0</span>
   </div>
 </div>
 
@@ -469,7 +469,7 @@
     });
   }
 
-  // ========== 基础题库模板（含行程问题扩展） ==========
+  // ========== 基础题库模板（最终修复版） ==========
   const BASE_TEMPLATES = [
     {
       type: "归一",
@@ -546,11 +546,8 @@
     {
       type: "行程",
       generate: () => {
-        // 随机选择三种行程问题之一
         const type = Math.floor(Math.random() * 3);
-        
         if (type === 0) {
-          // 基本行程问题
           const distance = Math.floor(Math.random() * 200) + 100;
           const speed = Math.floor(Math.random() * 30) + 40;
           const time = Math.round(distance / speed * 10) / 10;
@@ -561,11 +558,10 @@
             parentHint: `时间=路程÷速度=${distance}÷${speed}=${time}小时`
           };
         } else if (type === 1) {
-          // 相遇问题
-          const speed1 = Math.floor(Math.random() * 30) + 40; // 40-69
-          const speed2 = Math.floor(Math.random() * 20) + 30; // 30-49
+          const speed1 = Math.floor(Math.random() * 30) + 40;
+          const speed2 = Math.floor(Math.random() * 20) + 30;
           const speedSum = speed1 + speed2;
-          const time = Math.floor(Math.random() * 4) + 2; // 2-5小时，保证整数
+          const time = Math.floor(Math.random() * 4) + 2;
           const distance = speedSum * time;
           return {
             text: `🚗 甲车每小时${speed1}km，乙车每小时${speed2}km，两地相距${distance}km，几小时相遇？`,
@@ -574,11 +570,10 @@
             parentHint: `速度和 = ${speed1}+${speed2}=${speedSum}km/h，相遇时间 = ${distance}÷${speedSum}=${time}小时`
           };
         } else {
-          // 追及问题
-          const speedFast = Math.floor(Math.random() * 20) + 50; // 50-69
-          const speedSlow = Math.floor(Math.random() * 10) + 30; // 30-39
+          const speedFast = Math.floor(Math.random() * 20) + 50;
+          const speedSlow = Math.floor(Math.random() * 10) + 30;
           const speedDiff = speedFast - speedSlow;
-          const time = Math.floor(Math.random() * 4) + 2; // 2-5小时，保证整数
+          const time = Math.floor(Math.random() * 4) + 2;
           const distance = speedDiff * time;
           return {
             text: `🏃 甲每小时${speedFast}km，乙每小时${speedSlow}km，甲在乙后面${distance}km，几小时追上？`,
@@ -644,13 +639,13 @@
         const per1 = Math.floor(Math.random() * 3) + 2;
         const per2 = per1 + 1;
         const total1 = people * per1;
-        const盈 = Math.floor(Math.random() * 8) + 2;
-        const亏 = total1 + 盈 - people * per2;
+        const extra = Math.floor(Math.random() * 8) + 2;
+        const short = total1 + extra - people * per2;
         return {
-          text: `🦋 每人分${per1}个多${盈}个，每人${per2}个少${亏}个，小朋友几人？`,
+          text: `🦋 每人分${per1}个多${extra}个，每人${per2}个少${short}个，小朋友几人？`,
           ans: people,
           childHint: `🤔 两次分配相差几个？每人多分几个？人数怎么求？`,
-          parentHint: `(盈+亏)÷分配差=(${盈}+${亏})÷(${per2}-${per1})=${people}`
+          parentHint: `(盈+亏)÷分配差=(${extra}+${short})÷(${per2}-${per1})=${people}`
         };
       }
     },
@@ -829,7 +824,6 @@
     mistakeList: [],
     deferredPrompt: null,
     submitted: false,
-    // 暴露题库模板以便调试
     BASE_TEMPLATES: BASE_TEMPLATES,
     OLYMPIC_TEMPLATES: OLYMPIC_TEMPLATES,
 
@@ -1060,9 +1054,7 @@
     }
   };
 
-  // 将 app 挂载到 window 上，方便控制台调试
   window.app = app;
-
   window.onload = () => app.init();
 })();
 </script>
