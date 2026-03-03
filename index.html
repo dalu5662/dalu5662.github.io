@@ -441,7 +441,7 @@
   <div class="footer-actions">
     <button id="exportBtn" style="background:#6c5ce7;">📎 导出错题</button>
     <button id="demoBtn" style="background:#ff9f4b;">🧪 添加示例错题</button>
-    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v16.0</span>
+    <span style="flex:1; text-align:right; font-size:1rem; color:#4a4a4a;">🐼 快乐学数学 v18.0</span>
   </div>
 </div>
 
@@ -469,7 +469,7 @@
     });
   }
 
-  // ========== 基础题库模板（最终修复版） ==========
+  // ========== 基础题库模板（含行程问题扩展） ==========
   const BASE_TEMPLATES = [
     {
       type: "归一",
@@ -504,13 +504,9 @@
     {
       type: "和差",
       generate: () => {
-        // 先生成小明（小数），保证整数
-        const small = Math.floor(Math.random() * 15) + 5; // 5-19颗
-        // 生成差
-        const diff = Math.floor(Math.random() * 8) + 2; // 2-9
-        // 计算和，一定是整数
+        const small = Math.floor(Math.random() * 15) + 5;
+        const diff = Math.floor(Math.random() * 8) + 2;
         const sum = small * 2 + diff;
-        
         return {
           text: `🐼 小红和小明共${sum}颗糖，小红比小明多${diff}颗，小明有几颗？`,
           ans: small,
@@ -522,12 +518,9 @@
     {
       type: "和倍",
       generate: () => {
-        const multiple = Math.floor(Math.random() * 4) + 2; // 2-5倍
-        // 先生成科技书，保证整数
-        const small = Math.floor(Math.random() * 30) + 5; // 5-34本
-        // 计算总数，一定是 (multiple+1) 的倍数
+        const multiple = Math.floor(Math.random() * 4) + 2;
+        const small = Math.floor(Math.random() * 30) + 5;
         const sum = small * (multiple + 1);
-        
         return {
           text: `🦁 故事书+科技书=${sum}本，故事书是科技书${multiple}倍，科技书几本？`,
           ans: small,
@@ -539,12 +532,9 @@
     {
       type: "差倍",
       generate: () => {
-        const multiple = Math.floor(Math.random() * 3) + 2; // 2-4倍
-        // 先生成小红年龄，保证整数
-        const small = Math.floor(Math.random() * 10) + 5; // 5-14岁
-        // 计算年龄差，保证是 (multiple-1) 的倍数
+        const multiple = Math.floor(Math.random() * 3) + 2;
+        const small = Math.floor(Math.random() * 10) + 5;
         const diff = small * (multiple - 1);
-        
         return {
           text: `🐨 妈妈年龄是小红的${multiple}倍，比小红大${diff}岁，小红几岁？`,
           ans: small,
@@ -556,14 +546,47 @@
     {
       type: "行程",
       generate: () => {
-        const distance = Math.floor(Math.random() * 200) + 100;
-        const speed = Math.floor(Math.random() * 30) + 40;
-        return {
-          text: `🐘 甲乙相距${distance}km，速度${speed}km/h，几小时到达？`,
-          ans: Math.round(distance / speed * 10) / 10,
-          childHint: `🤔 时间 = 路程 ÷ 速度，你会算吗？`,
-          parentHint: `时间=路程÷速度=${distance}÷${speed}=${Math.round(distance / speed * 10) / 10}小时`
-        };
+        // 随机选择三种行程问题之一
+        const type = Math.floor(Math.random() * 3);
+        
+        if (type === 0) {
+          // 基本行程问题
+          const distance = Math.floor(Math.random() * 200) + 100;
+          const speed = Math.floor(Math.random() * 30) + 40;
+          const time = Math.round(distance / speed * 10) / 10;
+          return {
+            text: `🐘 甲乙相距${distance}km，速度${speed}km/h，几小时到达？`,
+            ans: time,
+            childHint: `🤔 时间 = 路程 ÷ 速度，你会算吗？`,
+            parentHint: `时间=路程÷速度=${distance}÷${speed}=${time}小时`
+          };
+        } else if (type === 1) {
+          // 相遇问题
+          const speed1 = Math.floor(Math.random() * 30) + 40; // 40-69
+          const speed2 = Math.floor(Math.random() * 20) + 30; // 30-49
+          const speedSum = speed1 + speed2;
+          const time = Math.floor(Math.random() * 4) + 2; // 2-5小时，保证整数
+          const distance = speedSum * time;
+          return {
+            text: `🚗 甲车每小时${speed1}km，乙车每小时${speed2}km，两地相距${distance}km，几小时相遇？`,
+            ans: time,
+            childHint: `🤔 两车相向而行，每小时共行多少km？再用总路程除以速度和。`,
+            parentHint: `速度和 = ${speed1}+${speed2}=${speedSum}km/h，相遇时间 = ${distance}÷${speedSum}=${time}小时`
+          };
+        } else {
+          // 追及问题
+          const speedFast = Math.floor(Math.random() * 20) + 50; // 50-69
+          const speedSlow = Math.floor(Math.random() * 10) + 30; // 30-39
+          const speedDiff = speedFast - speedSlow;
+          const time = Math.floor(Math.random() * 4) + 2; // 2-5小时，保证整数
+          const distance = speedDiff * time;
+          return {
+            text: `🏃 甲每小时${speedFast}km，乙每小时${speedSlow}km，甲在乙后面${distance}km，几小时追上？`,
+            ans: time,
+            childHint: `🤔 甲每小时比乙多走多少km？用距离差除以速度差。`,
+            parentHint: `速度差 = ${speedFast}-${speedSlow}=${speedDiff}km/h，追及时间 = ${distance}÷${speedDiff}=${time}小时`
+          };
+        }
       }
     },
     {
@@ -634,14 +657,11 @@
     {
       type: "分数",
       generate: () => {
-        const total = Math.floor(Math.random() * 100) + 50; // 50-149
-        const numerator = Math.floor(Math.random() * 3) + 1; // 1-3
-        const denominator = Math.floor(Math.random() * 3) + 4; // 4-6
-        
-        // 计算结果并四舍五入到两位小数
+        const total = Math.floor(Math.random() * 100) + 50;
+        const numerator = Math.floor(Math.random() * 3) + 1;
+        const denominator = Math.floor(Math.random() * 3) + 4;
         const rawResult = total * numerator / denominator;
         const roundedResult = Math.round(rawResult * 100) / 100;
-        
         return {
           text: `🐞 路全长${total}米，修了${numerator}/${denominator}，修了多少米？`,
           ans: roundedResult,
@@ -809,6 +829,9 @@
     mistakeList: [],
     deferredPrompt: null,
     submitted: false,
+    // 暴露题库模板以便调试
+    BASE_TEMPLATES: BASE_TEMPLATES,
+    OLYMPIC_TEMPLATES: OLYMPIC_TEMPLATES,
 
     init: function() {
       window.addEventListener('beforeinstallprompt', (e) => {
@@ -1036,6 +1059,9 @@
       this.updateMistakeUI();
     }
   };
+
+  // 将 app 挂载到 window 上，方便控制台调试
+  window.app = app;
 
   window.onload = () => app.init();
 })();
